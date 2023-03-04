@@ -1,0 +1,8 @@
+Buckley-Leverett
+buckley-leverett
+pas/*
+*.pptx
+*/cmake-build-debug
+*/.idea
+*/.ipynb_checkpoints
+*/__pycache__
