@@ -86,6 +86,8 @@ class BLproblem:
             p[i] = self.pc(sw[i])
         return p
 
+
+
 sw0 = 80
 so0 = 20
 A = BLproblem(100, sw0, so0)
