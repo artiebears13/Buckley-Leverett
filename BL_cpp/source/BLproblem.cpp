@@ -60,6 +60,7 @@ BLproblem::solver(double t0, double tn, double time_steps, double sw0, double sw
     std::vector<double>  x(sw.size(),0.0);
     for (int i = 0; i < x.size(); ++i) {
         x[i] = i*h;
+        sw[i] = sw[i]/100.;
     }
 
     std::pair<std::vector<double>, std::vector<double>> res(x,sw);
@@ -98,17 +99,21 @@ void BLproblem::solver_dynamic(double t0, std::vector<double> tn, double time_st
     file<<std::endl;
 
     for (int i = 0; i < tn.size(); ++i) {
+        std::cout<<"solving for t = "<<tn[i]<<std::endl;
 
         auto solution = solver(t0,tn[i],time_steps*tn[i],sw0,swn);
         auto ofp = get_OFP(solution.second);
         auto pc = get_pc(solution.second);
         for (int j = 0; j < solution.first.size(); ++j) {
             file<<solution.first[j]<<" "<<solution.second[j]<<" "
-            <<ofp.first[i] <<" "<<ofp.second[i]<<" "
-            <<pc[i]<<std::endl;
+            <<ofp.first[j] <<" "<<ofp.second[j]<<" "
+            <<pc[j]<<std::endl;
         }
     }
     std::cout<<"writing completed!"<<std::endl;
+    auto command = "python3 ../source/visualize.py "+filename;
+    std::cout<<"creating graphs:"<<std::endl;
+    system(command.c_str());
 
 
 

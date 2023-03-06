@@ -5,7 +5,7 @@
 int main() {
 
 
-    double sw0 = 80;
+    double sw0 =80;
     double so0 =20;
 
     BLproblem A(100, sw0, so0);
@@ -16,7 +16,7 @@ int main() {
 //    A.save_SW(solution, filename);
 //    auto command = "python3 ../plot_sw.py "+filename;
 //    system(command.c_str());
-    std::vector<double> times = {1,10,20,30};
+    std::vector<double> times = {1,10,20,50,100,200};
     A.solver_dynamic(0,times,100,sw0,so0);
 
     return 0;
