@@ -11,11 +11,14 @@ with open(filename, 'r') as f:
 # Разбиваем строки на столбцы и преобразуем в числа
 x = []
 y = []
+z = []
 for line in lines:
     columns = line.strip().split()
     x.append(float(columns[0]))
-    y.append(float(columns[2]))
+    y.append(float(columns[1]))
+    z.append(float(columns[2]))
 
 # Строим график
 plt.plot(x, y)
-plt.savefig()
+plt.plot(x, z)
+plt.savefig(filename)

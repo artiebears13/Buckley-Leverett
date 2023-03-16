@@ -6,3 +6,6 @@ pas/*
 */.idea
 */.ipynb_checkpoints
 */__pycache__
+My_BL
+*.pptx
+*/build

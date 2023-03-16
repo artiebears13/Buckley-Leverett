@@ -105,7 +105,7 @@ void BLproblem::solver_dynamic(double t0, std::vector<double> tn, double time_st
         auto ofp = get_OFP(solution.second);
         auto pc = get_pc(solution.second);
         for (int j = 0; j < solution.first.size(); ++j) {
-            file<<solution.first[j]<<" "<<solution.second[j]<<" "
+            file<<solution.first[j]<<" "<<solution.second[j]<<" "<<1-solution.second[j]<<" "
             <<ofp.first[j] <<" "<<ofp.second[j]<<" "
             <<pc[j]<<std::endl;
         }
@@ -119,7 +119,8 @@ void BLproblem::solver_dynamic(double t0, std::vector<double> tn, double time_st
 
 }
 
-std::pair<std::vector<double>, std::vector<double>> BLproblem::get_OFP(std::vector<double> sw){
+std::pair<std::vector<double>, std::vector<double>>
+BLproblem::get_OFP(std::vector<double> sw){
     std::vector<double> ko(sw.size(), 0.0);
     std::vector<double> kw(sw.size(), 0.0);
     for (int i = 0; i < sw.size(); ++i) {
@@ -138,7 +139,10 @@ std::vector<double> BLproblem::get_pc(std::vector<double> sw){
     return p;
 }
 
-void BLproblem::save_OFP(std::vector<double> sw, std::pair<std::vector<double>, std::vector<double>> perms, std::string filename){
+void BLproblem::save_OFP(std::vector<double> sw,
+                         std::pair<std::vector<double>,
+                         std::vector<double>> perms,
+                         std::string filename){
     std::ofstream file(filename);
     for (int i = 0; i < perms.first.size(); ++i) {
         file<<sw[i]<<" "<<perms.first[i]<<" "<<perms.second[i]<<std::endl;
@@ -161,4 +165,15 @@ void BLproblem::save_SW(std::pair<std::vector<double>, std::vector<double>> data
     }
     file.close();
 }
+
+void BLproblem::save_SO(std::pair<std::vector<double>, std::vector<double>> data, std::string filename) {
+    std::ofstream file(filename);
+    for (int i = 0; i < data.first.size(); ++i) {
+        file << data.first[i] << " " << 1.-data.second[i] << std::endl;
+    }
+    file.close();
+}
+
+
+
 

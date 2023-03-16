@@ -11,6 +11,7 @@ with open(filename, 'r') as f:
 t = []
 x = [[]]
 sw = [[]]
+so = [[]]
 ko = [[]]
 kw = [[]]
 pc = [[]]
@@ -33,6 +34,7 @@ for i in range(len(t)):
 for i in range(len(t)):
     x.append([])
     sw.append([])
+    so.append([])
     ko.append([])
     kw.append([])
     pc.append([])
@@ -42,14 +44,21 @@ for i in range(len(t)):
         x[i].append(float(params[0]))
         # print(x[i])
         sw[i].append(float(params[1]))
-        ko[i].append(float(params[2]))
-        kw[i].append(float(params[3]))
-        pc[i].append(float(params[4]))
+        so[i].append(float(params[2]))
+        ko[i].append(float(params[3]))
+        kw[i].append(float(params[4]))
+        pc[i].append(float(params[5]))
 
 for i in range(len(t)):
     plt.plot(x[i], sw[i], label=f't = {str(t[i])}')
 plt.legend()
 plt.savefig(filename+'_SW.png')
+plt.close()
+
+for i in range(len(t)):
+    plt.plot(x[i], so[i], label=f't = {str(t[i])}')
+plt.legend()
+plt.savefig(filename+'_SO.png')
 
 rows, cols = (len(t) // 4 + len(t) % 4), 4
 fig, axs = plt.subplots(rows, cols, figsize=(20, 7), constrained_layout=True)

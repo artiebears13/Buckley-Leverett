@@ -1,5 +1,6 @@
 #pragma once
 
+#include "params.h"
 #include "cmath"
 #include <iostream>
 #include <vector>
@@ -9,16 +10,17 @@
 #include <cstdlib>
 #include <ctime>
 
+
 class BLproblem {
 private:
     int N;                              //number of steps
     double h;                           //step
-    double phi = 0.2;                   //porosity
-    double kw0 = 0.9;                   //water relative permeability
-    double ko0 = 1.;                   //oil relative permeability
-    double mu_w = 0.7e-3;               //wetting phase viscosity
-    double mu_o = 1.0e-3;               //non wetting phase viscosity
-    double u = 3.0;                     //inject rate
+    double phi = PHI;                   //porosity
+    double kw0 = KW_0;                   //water relative permeability
+    double ko0 = KO_0;                   //oil relative permeability
+    double mu_w = MU_W;               //wetting phase viscosity
+    double mu_o = MU_O;               //non wetting phase viscosity
+    double u = U;                     //inject rate
     std::vector<double> nw={};          //water exponent for modified Brooks-Corey functions
     std::vector<double> no={};          //oil exponent for modified Brooks-Corey functions
     std::vector<double> m={};           //
@@ -40,7 +42,7 @@ public:
         h = 1. / (Nx - 1);
     }
 
-//  return (sw^nw)*kw0
+/*  return (sw^nw)*kw0*/
     double k_rw(double &sw);
 
 //    return (1-sw)^no * ko0
@@ -57,21 +59,41 @@ public:
 
     double g(double &sw);
 
-//    return pair(x,sw)
+/// solver of Buckley-Lewerett equation
+/// \param t0: start time
+/// \param tn: stop time
+/// \param time_steps: number steps by time
+/// \param sw0: initial water saturation
+/// \param swn: initial oil saturation
+/// \return: pair (x, sw(x))
     std::pair<std::vector<double>, std::vector<double>>
-    solver(double t0, double tn, double time_steps, double sw0, double swn);
+    solver(double t0,
+           double tn,
+           double time_steps,
+           double sw0,
+           double swn);
 
-//    save results to file
+/// solves Buckley-Lewerett equation, write solution to files
+/// \param t0 start time
+/// \param tn vector of times where you want to get solution
+/// \param time_steps step by time
+/// \param sw0 initial water saturation
+/// \param swn initial oil saturation
     void solver_dynamic(double t0, std::vector<double> tn, double time_steps, double sw0, double swn);
 
-//    return pain(ko, kw)
+///
+/// \param sw - vector of water saturation
+/// \return pair(ko(sw), kw(sw))
     std::pair<std::vector<double>, std::vector<double>>
     get_OFP(std::vector<double> sw);
 
     std::vector<double>
     get_pc(std::vector<double> sw);
 
-    //save "sw first second"
+    ///
+    /// \param sw  vector - water saturation
+    /// \param perms pair(ko(sw), kw(sw))
+    /// \param filename
     void save_OFP(std::vector<double> sw,
                   std::pair<std::vector<double>, std::vector<double>> perms,
                   std::string filename);
@@ -85,6 +107,10 @@ public:
     void save_SW(std::pair<std::vector<double>,
             std::vector<double>> data,
             std::string filename);
+
+    void save_SO(std::pair<std::vector<double>,
+            std::vector<double>> data,
+                 std::string filename);
 
 
 };
