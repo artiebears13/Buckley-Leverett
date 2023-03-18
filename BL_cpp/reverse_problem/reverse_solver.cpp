@@ -5,7 +5,7 @@
 #include "cmath"
 
 std::pair<std::vector<double>,
-         std::vector<double>>
+        std::vector<double>>
 read_data(std::string filename) {
     std::vector<double> x, y, z;
     double x_val, y_val, z_val;
@@ -40,43 +40,53 @@ double f(double x, double power) {
     return pow(x, power) * k0;
 }
 
-double estimate(double x, double y, double init) {
+double estimate(double sw, double target) {
+
+    double b = 5;
+    double a = 0;
     double eps = 0.001;
-    double result = f(x, init);
-    double correction=eps;
-    double res;
 
-    int direction = (result-y)/std::abs(result-y);
-    while (std::abs(result - y) < eps){
-
+    double step = (b - a) / 10;
+    double power = step;
+    int direction = 1;
+    while (std::abs(f(sw, power) - target) > eps) {
+        if (f(sw, power) > target) {
+            if (direction == 1) {
+                power += step;
+            } else {
+                direction = 1;
+                step = step / 2;
+                power+=step;
+            }
+        }
+        else{
+            if (direction==1){
+                direction = -1;
+                step = step/2;
+                power+=step*direction;
+            }
+            else{
+                power+=step*direction;
+            }
+        }
     }
-
-    else {
-        correction = result/y/x;
-        if (result<y){correction*=-1;}
-        std::cout<<"correction: "<<correction<<" init: "<<init<<std::endl;
-        init += correction;
-
-        return estimate(x,y,init);
-
-    }
-
+    return power;
 }
 
-void parameter_estimation(std::vector<double> x, std::vector<double> y){
-    double init = 1.;
-    for (int i = 0; i < x.size()/2; ++i) {
-        std::cout<<"============="<<x[i]<<"======="<<y[i]<<std::endl;
-        init = estimate(x[i],y[i],init);
-        std::cout<<"i: "<<i<<" power: "<<init<<std::endl;
-    }
-}
+//void parameter_estimation(std::vector<double> x, std::vector<double> y) {
+//    double init = 1.;
+//    for (int i = 0; i < x.size() / 2; ++i) {
+//        std::cout << "=============" << x[i] << "=======" << y[i] << std::endl;
+//        init = estimate(x[i], y[i], init);
+//        std::cout << "i: " << i << " power: " << init << std::endl;
+//    }
+//}
 
 
-int main(){
-    std::cout<<"hui";
+int main() {
+
     auto data = read_data("../ofp/ofp1");
-    auto a = estimate(0.8, 0.576,1);
+    auto a = estimate(0.8, 0.576);
 //    parameter_estimation(data.first, data.second);
     return 0;
 }
