@@ -72,6 +72,6 @@ For default data:
 
 ## $$K_{rw}(sw)$$ and $$k_{ro}(sw)$$
 
-![permeability](output_examples/ofp.png)
+![permeability](output_examples/OFP.png)
 
 
