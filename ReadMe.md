@@ -68,10 +68,10 @@ For default data:
 
 ### Saturation:
 
-![saturation](BL_cpp/results/res_15-03-2023_18-54-14_SW.png)
+![saturation](output_examples/sw.png)
 
 ## $$K_{rw}(sw)$$ and $$k_{ro}(sw)$$
 
-![permeability](BL_cpp/results/res_15-03-2023_18-54-14_OFP.png)
+![permeability](output_examples/ofp.png)
 
 
