@@ -42,6 +42,8 @@ Program generates file ```ofp``` and you can plot (follow instruction) after run
 :
 ![img](output_examples/img.png)
 
+**example of result**:
+![](output_examples/ofp.png)
 ______________________
 # Example of dynamic solution
 
