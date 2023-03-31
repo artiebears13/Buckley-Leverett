@@ -70,7 +70,7 @@ For default data:
 
 ![saturation](BL_cpp/results/res_15-03-2023_18-54-14_SW.png)
 
-$$K_{rw}(sw)$$ and $$k_{ro}(sw)$$
+## $$K_{rw}(sw)$$ and $$k_{ro}(sw)$$
 
 ![permeability](BL_cpp/results/res_15-03-2023_18-54-14_OFP.png)
 
