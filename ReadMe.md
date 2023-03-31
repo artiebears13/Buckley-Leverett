@@ -23,8 +23,27 @@ make
 ```bash
 ./BL_cpp
 ```
+
+or to run dynamic solution use
+
+```bash
+./Dynamic
+```
 ________________
-# Result examples
+- Parameters: [BL_cpp/source/params.h](BL_cpp/source/params.h)
+- Initial params: [BL_cpp/main.cpp](BL_cpp/main.cpp)
+
+---------------
+
+# Example of solution
+
+Program generates file ```ofp``` and you can plot (follow instruction) after running 
+```./BL_cpp``` 
+:
+![img](output_examples/img.png)
+
+______________________
+# Example of dynamic solution
 
 program generates file 
 ```
@@ -42,15 +61,14 @@ you can change functions
  - ```double BLproblem::k_rw(double &sw)``` (line 5) 
  - ```double BLproblem::k_ro(double &sw)``` (line 10)
  -  ```double BLproblem::pc(double &sw)```  (line 14)
-______________
-# Example of solution
+
 For default data:
 
 ### Saturation:
 
 ![saturation](BL_cpp/results/res_15-03-2023_18-54-14_SW.png)
 
-### $$K_{rw}(sw)$$ and $$k_{ro}(sw)
+### $$K_{rw}(sw)$$ and $$k_{ro}(sw)$$
 
 ![permeability](BL_cpp/results/res_15-03-2023_18-54-14_OFP.png)
 

@@ -21,43 +21,47 @@ private:
     double mu_w = MU_W;               //wetting phase viscosity
     double mu_o = MU_O;               //non wetting phase viscosity
     double u = U;                     //inject rate
-    std::vector<double> nw={};          //water exponent for modified Brooks-Corey functions
-    std::vector<double> no={};          //oil exponent for modified Brooks-Corey functions
-    std::vector<double> m={};           //
-    std::vector<double> sw={};          //water saturation
-    std::vector<double> sw_prev={};     //water saturation previous layer
+    std::vector<double> nw = {};          //water exponent for modified Brooks-Corey functions
+    std::vector<double> no = {};          //oil exponent for modified Brooks-Corey functions
+    std::vector<double> m = {};           //
+    std::vector<double> sw = {};          //water saturation
+    std::vector<double> sw_prev = {};     //water saturation previous layer
 
 
 public:
-    BLproblem(int Nx, double sw0, double so0) {
+    BLproblem(int Nx, double sw0, double so0, double start_nw, double start_no) {
         N = Nx;
         for (int i = 0; i < N; ++i) {
+            double n = 1. + i / 100.;
             sw_prev.push_back(so0);
             sw.push_back(0.0);
-            nw.push_back(2.0);
-            no.push_back(2.0);
+            nw.push_back(start_nw);
+            no.push_back(start_no);
+//            nw.push_back(2.0+1.0*i/100);
+//            no.push_back(2.0+1.0*i/100);
             m.push_back(2.0);
+//            std::cout << nw[i] << " " << no[i] << std::endl;
         }
         sw_prev[0] = sw0;
         h = 1. / (Nx - 1);
     }
 
 /*  return (sw^nw)*kw0*/
-    double k_rw(double &sw);
+    double k_rw(double sw_cur);
 
-//    return (1-sw)^no * ko0
-    double k_ro(double &sw);
+//    return (1-sw_cur)^no * ko0
+    double k_ro(double sw_cur);
 
-//    return sw^m
-    double pc(double &sw);
+//    return sw_cur^m
+    double pc(double &sw_cur);
 
-//    return sw*(porosity)
-    double sigma(double &sw);
+//    return sw_cur*(porosity)
+    double sigma(double &sw_cur);
 
 //
-    double f(double &sw);
+    double f(double &sw_cur);
 
-    double g(double &sw);
+    double g(double &sw_cur);
 
 /// solver of Buckley-Lewerett equation
 /// \param t0: start time
@@ -106,7 +110,7 @@ public:
 //    save "first second"
     void save_SW(std::pair<std::vector<double>,
             std::vector<double>> data,
-            std::string filename);
+                 std::string filename);
 
     void save_SO(std::pair<std::vector<double>,
             std::vector<double>> data,
