@@ -18,4 +18,5 @@ for line in lines:
 
 # Строим график
 plt.plot(x, y)
+plt.title('sw(x)')
 plt.savefig()

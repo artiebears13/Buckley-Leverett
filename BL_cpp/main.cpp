@@ -2,15 +2,31 @@
 #include "source/BLproblem.h"
 #include <cstdlib>
 
-int main() {
+int main(int argc, char** argv) {
 
+    double nw;
+    double no;
+    std::cout<<argc<<std::endl;
+    for (int i = 0; i < argc; i++){
+        std::cout<<"i: "<<argv[i]<<std::endl;
+    }
+    
 
     double sw0 = 0.80;
     double so0 = 0.20;
-    double nw = 2.5638;
-    double no = 3;
+    if (argc==1){
+        nw = 2.5638;
+        no = 3.5;
+    }
+    else if (argc==2){
+        std::cout << "wrong number of parameters ('./BL_cpp nw no')" << std::endl;
+    }
+    else{
+        nw = std::stod(argv[1]);
+        no = std::stod(argv[2]);
+    }
     int time_steps = 10000; //number of time steps for 1s (total steps = time_steps*T)
-    std::string filename = "../ofp/ofp";
+    std::string filename = "../ofp/ofp_new";
 
     BLproblem BL(100, sw0, so0, nw, no);
 //    std::vector<double> times = {0.001,0.002,0.004,0.006,0.008,0.01};

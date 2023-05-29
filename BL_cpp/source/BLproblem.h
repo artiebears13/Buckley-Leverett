@@ -83,7 +83,7 @@ public:
 /// \param time_steps step by time
 /// \param sw0 initial water saturation
 /// \param swn initial oil saturation
-    void solver_dynamic(double t0, std::vector<double> tn, double time_steps, double sw0, double swn);
+    void solver_dynamic(double t0, std::vector<double> tn, double time_steps, double sw0, double swn, std::string filename);
 
 ///
 /// \param sw - vector of water saturation

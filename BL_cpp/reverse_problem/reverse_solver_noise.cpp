@@ -21,7 +21,7 @@ read_data(std::string filename) {
 
 
 // считывание координат из файла
-    while (file >> x_val >> y_val >> z_val) {
+    while (file >>sw_origin>> x_val >> y_val >> z_val) {
         x.push_back(x_val);
         y.push_back(y_val);
         z.push_back(z_val);
@@ -91,12 +91,14 @@ double estimate2(double sw, double target,double start) {
     int direction = 1;
 
     double iters = 0;
-    while (std::abs(f2(sw, pwr) - target) > eps){ //and iters<1000) {
-//        std::cout<<"pow: "<<pwr << " f2: " << f2(sw, pwr) << " target: " << target <<" step: "<<step<< std::endl;
+    while (std::abs(f2(sw, pwr) - target) > eps){ 
+        
         if (f2(sw, pwr) > target) {
             if (direction == 1) {
+                
                 pwr += step;
             } else {
+                
                 direction = 1;
                 step = step / 2;
                 pwr+=step;
@@ -104,11 +106,15 @@ double estimate2(double sw, double target,double start) {
         }
         else{
             if (direction==1){
+
+                
                 direction = -1;
                 step = step/2;
                 pwr+= step * direction;
             }
             else{
+
+                
                 pwr+= step * direction;
             }
         }
@@ -121,6 +127,7 @@ double estimate2(double sw, double target,double start) {
 
 std::pair<std::vector<double>, std::vector<double>> 
 parameter_estimation(std::vector<double> x, std::vector<double> y, std::vector<double> y2) {
+    
     std::vector<double> pow1_vec={};
     std::vector<double> pow2_vec={};
     double init = 1.;
@@ -128,17 +135,15 @@ parameter_estimation(std::vector<double> x, std::vector<double> y, std::vector<d
     for (int i = 0; i < x.size() / 2; ++i) {
         std::cout << "=============" << x[i] << "=======" << y[i] << std::endl;
         init = estimate(x[i], y[i], init);
-//        std::cout<<"---////---"<<std::endl;
+        
         init2 = estimate2(x[i], y2[i], init2);
         pow1_vec.push_back(init);
         pow2_vec.push_back(init2);
-
-//        std::cout<<"---////---{}{}{}{}{}"<<std::endl;
+        
         std::cout << "i: " << i << " nw: " << init << " no: " << init2<< std::endl;
     }
     std::pair<std::vector<double>, std::vector<double>> res(pow1_vec, pow2_vec);
     return res;
-    
 }
 
 void find_stats(std::vector<double> values){
@@ -172,13 +177,17 @@ void find_stats(std::vector<double> values){
 
 int main(int argc, char *argv[]) {
 
-//    std::cout<<argv[1]<<std::endl;
+    std::cout<<argv[1]<<std::endl;
 
-    auto data = read_data("../ofp/ofp2");
-
+    auto data = read_data(argv[1]);
     auto pwrs = parameter_estimation(data.first, data.second.first, data.second.second);
-
+    std::cout<<"=====    nw:     ====="<<std::endl;
     find_stats(pwrs.first);
+    std::cout<<std::endl;
+    std::cout<<"=====    no:     ====="<<std::endl;
+    find_stats(pwrs.second);
+
+    
     return 0;
 }
 

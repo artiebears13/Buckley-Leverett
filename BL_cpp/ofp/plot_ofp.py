@@ -1,5 +1,6 @@
 import sys
 import matplotlib.pyplot as plt
+import numpy as np
 
 # Получаем путь к файлу из аргументов командной строки
 filename = sys.argv[1]
@@ -22,3 +23,8 @@ for line in lines:
 plt.plot(x, y)
 plt.plot(x, z)
 plt.savefig(filename)
+
+x_range = np.linspace(0,1,50)
+plt.clear()
+plt.plot(x, y)
+plt.savefig('sw_'+filename)

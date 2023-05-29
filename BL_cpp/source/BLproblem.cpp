@@ -76,16 +76,19 @@ BLproblem::solver(double t0, double tn, double time_steps, double sw0, double sw
     return res;
 };
 
-void BLproblem::solver_dynamic(double t0, std::vector<double> tn, double time_steps, double sw0, double swn) {
-    auto t = std::time(nullptr);
-    auto tm = *std::localtime(&t);
+void BLproblem::solver_dynamic(double t0, std::vector<double> tn, double time_steps, double sw0, double swn, std::string filename) {
+    if (filename==""){
+        auto t = std::time(nullptr);
+        auto tm = *std::localtime(&t);
 
-    std::ostringstream oss;
-    oss << std::put_time(&tm, "%d-%m-%Y_%H-%M-%S");
-    auto filename = oss.str();
+        std::ostringstream oss;
+        oss << std::put_time(&tm, "%d-%m-%Y_%H-%M-%S");
+        filename = oss.str();
+        filename = "../results/res_" + filename; // получаем текущее время
+        }
 
 
-    filename = "../results/res_" + filename; // получаем текущее время
+    
 
     std::cout << "writing results to file: " + filename << std::endl;
     std::cout << "LINE: x sw ko kw pc " << std::endl;
@@ -123,6 +126,7 @@ void BLproblem::solver_dynamic(double t0, std::vector<double> tn, double time_st
     auto command = "python3 ../source/visualize.py " + filename;
     std::cout << "creating graphs:" << std::endl;
     system(command.c_str());
+    std::cout << "writing results to file: " + filename << std::endl;
 
 
 }
