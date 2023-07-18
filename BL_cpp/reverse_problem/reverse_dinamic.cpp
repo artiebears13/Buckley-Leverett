@@ -161,7 +161,7 @@ public:
     void
     add_noise_dynamic(){
         std::default_random_engine generator; // генератор случайных чисел
-        generator.seed(42);
+        generator.seed(10);
         for (int i = 0; i < n_times; i++){
             sw[i] = add_noise_static(sw[i], generator);
         }
@@ -216,11 +216,15 @@ public:
 
         
         std::normal_distribution<double> distribution{0.0, std}; // нормальное распределение с дисперсией 5%
+        double log_sw, log_sw_noised, log_so;
 
         // for (auto &value: values) {
         for (int i = 0; i < values.size(); i++){
             double noise = distribution(generator) ; // вычисление шума
+            log_sw = values[i];
             values[i] += noise; // добавление шума к значению элемента вектора
+            // write_log(log_sw, values[i], 1-values[i]);
+            
         }
 
         // вывод измененного вектора значений
@@ -239,11 +243,11 @@ public:
             n_o.push_back(cur_corey_coefs.first);
             n_w.push_back(cur_corey_coefs.second);
 
-            std::cout<<"======================================"<<std::endl;
-            std::cout<<"=====    no:     ====="<<std::endl;
+            // std::cout<<"======================================"<<std::endl;
+            // std::cout<<"=====    no:     ====="<<std::endl;
             find_stats_static(cur_corey_coefs.first);
-            std::cout<<std::endl;
-            std::cout<<"=====    nw:     ====="<<std::endl;
+            // std::cout<<std::endl;
+            // std::cout<<"=====    nw:     ====="<<std::endl;
             find_stats_static(cur_corey_coefs.second);
 
         }
@@ -275,9 +279,9 @@ public:
         norm = std::sqrt(norm);
 
         // print the results
-        std::cout << "Mean: " << mean << std::endl;
-        std::cout << "Standard deviation: " << std_dev << std::endl;
-        std::cout << "L2-norm: " << norm << std::endl;
+        // std::cout << "Mean: " << mean << std::endl;
+        // std::cout << "Standard deviation: " << std_dev << std::endl;
+        // std::cout << "L2-norm: " << norm << std::endl;
         
     }
 
@@ -289,72 +293,79 @@ public:
         double std_dev_nw = 0;
         double size_of_vectors = N_T*N/2;
         double size_check=0;
-        std::cout<<"======STATS: "<<size_of_vectors<<std::endl;
-        std::cout<<"len(n_o): "<<n_o.size()<<std::endl;
+        // std::cout<<"======STATS: "<<size_of_vectors<<std::endl;
+        // std::cout<<"len(n_o): "<<n_o.size()<<std::endl;
 
         for (std::vector<double> no_vec : n_o){
             for (int i=0; i<no_vec.size(); i++){// no_value : no_vec){
                 // std::cout<<no_vec[i]<<std::endl;
                 if (!std::isnan(no_vec[i])){
                 mean_no+=no_vec[i];
+                size_check++;
                 }
                 else{
-                    mean_no+=no_vec[i-1];
+                    mean_no+=0.0;
                 }
-                size_check++;
+                // size_check++;
             }
         }
         
-        
+        mean_no/=size_check;
+        size_check = 0.0;
+
         for (std::vector<double> nw_vec : n_w){
             for (int i=0; i<nw_vec.size(); i++){// no_value : no_vec){
                 if (!std::isnan(nw_vec[i])){
-                mean_nw+=nw_vec[i];
+                    mean_nw+=nw_vec[i];
+                    size_check++;
                 }
                 else{
-                    mean_nw+=nw_vec[i-1];
+                    mean_nw+=0.0;
                 }
             }
         }
-        std::cout<<"======STATS_check: "<<size_check<<std::endl;
+        // std::cout<<"======STATS_check: "<<size_check<<std::endl;
 
         mean_nw/=size_check;
-        mean_no/=size_check;
+        
         size_check = 0;
         for (std::vector<double> no_vec : n_o){
             for (int i=0; i<no_vec.size(); i++){
                 if (!std::isnan(no_vec[i])){
-                    
+                    size_check++;    
                     std_dev_no += std::pow(no_vec[i] - mean_no, 2);
                 }
                 else{
-                    std_dev_no += std::pow(no_vec[i-1] - mean_no, 2);
+                    std_dev_no += 0;
                 }
-                size_check++;
+                
             }
 
-        }
-        
-        for (std::vector<double> nw_vec : n_w){
-            for (int i=0; i<nw_vec.size(); i++){
-                if (!std::isnan(nw_vec[i])){
-                    // size_check++;
-                    std_dev_nw += std::pow(nw_vec[i] - mean_nw, 2);
-                }
-                else{
-                    std_dev_nw += std::pow(nw_vec[i-1] - mean_nw, 2);
-                }
-            }
         }
 
         double l2_no = std::sqrt(std_dev_no);
+        std_dev_no /= size_check;
+        std_dev_no = std::sqrt(std_dev_no);
+        
+        size_check = 0;
+        for (std::vector<double> nw_vec : n_w){
+            for (int i=0; i<nw_vec.size(); i++){
+                if (!std::isnan(nw_vec[i])){
+                    size_check++;
+                    std_dev_nw += std::pow(nw_vec[i] - mean_nw, 2);
+                }
+                else{
+                    std_dev_nw += 0;
+                }
+            }
+        }
+
+        
         double l2_nw = std::sqrt(std_dev_nw);
 
 
         // calculate the standard deviation
         
-        std_dev_no /= size_check;
-        std_dev_no = std::sqrt(std_dev_no);
         
         std_dev_nw /= size_check;
         std_dev_nw = std::sqrt(std_dev_nw);
@@ -373,7 +384,7 @@ public:
         std::cout<<"               n_o           "<<std::endl<<std::endl;
         std::cout << "Mean: " << mean_no << std::endl;
         std::cout << "Standard deviation: " << std_dev_no << std::endl;
-        // std::cout << "L2 norm: " << l2_no << std::endl;
+        // // std::cout << "L2 norm: " << l2_no << std::endl;
 
         std::cout<<"============================="<<std::endl;
         std::cout<<"               n_w           "<<std::endl<<std::endl;
@@ -394,6 +405,15 @@ void write_res(int number, std::pair<std::pair<double, double>, std::pair<double
         std::ofstream myfile;
         myfile.open(file_name, std::ios::app);
         myfile << number << " " << res.first.first << " " << res.first.second << " " << res.second.first << " " << res.second.second << std::endl;
+        myfile.close();
+}
+
+void write_log(double sw, double sw_noised, double so_noised)
+{
+        std::string file_name = "../results/log.txt";
+        std::ofstream myfile;
+        myfile.open(file_name, std::ios::app);
+        myfile << sw << " " << sw_noised << " " << so_noised << std::endl;
         myfile.close();
 }
 
@@ -428,13 +448,13 @@ void write_res(int number, std::pair<std::pair<double, double>, std::pair<double
     }
 
     double f_o(double x, double power) {
-        double ko = 1;
+        double ko = 1.0;
     //    std::cout<<"x: "<<x<<" pow: "<<power<<std::endl;
-        return std::pow(1-x, power) * ko;
+        return std::pow(1.0-x, power) * ko;
     }
 
     double estimate_no_log(double sw, double target, double start) {
-        double ko0 = 1;
+        double ko0 = 1.0;
         double no = std::log(target/ko0)/std::log(1.0-sw);
         return no;
 

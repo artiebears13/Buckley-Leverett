@@ -1,1 +1,10 @@
-
+*.png
+/*.png
+*.txt
+results/*
+ofp/sw_*
+*/__pycache__
+.idea
+*build
+venv
+../build

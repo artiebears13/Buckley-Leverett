@@ -16,3 +16,9 @@ add_executable(add_noise reverse_problem/add_noise.cpp)
 add_executable(reverse_noise reverse_problem/reverse_solver_noise.cpp)
 
 add_executable(reverse_dynamic reverse_problem/reverse_dinamic.cpp)
+
+add_executable(reverse_finally reverse_final.cpp
+                                 source/BLproblem.cpp)
+
+add_executable(reverse_final_algo reverse_final_algo.cpp
+                                 source/BLproblem.cpp)

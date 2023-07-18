@@ -123,7 +123,7 @@ def plot_delta(filenames):
 
 def plot_figs(filenames):
     # Получаем путь к файлу из аргументов командной строки
-    save_to = "std_progress.png"
+    save_to = "std_progress_new.png"
 
     fig = plot(filenames)
     fig.savefig(save_to)
@@ -142,6 +142,7 @@ if __name__ == '__main__':
     res_std_files = [f for f in files if f.startswith('res_std') and f.endswith(".txt")]
     print(sorted(res_std_files))
     plot_figs(sorted(res_std_files))
+    plot(sorted(res_std_files))
 
     
     
